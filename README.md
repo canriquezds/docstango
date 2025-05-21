@@ -4,6 +4,64 @@
 **Project:** Docstango
 
 
+## May 21, 2025
+Today we discovered that the `GitHubMCPServer` communicates using a `stdio` transport. This was confirmed after reading the post [How to host your MCP Server](https://www.devshorts.in/p/how-to-host-your-mcp-server), which helped clarify the server's expected setup.
+
+![Standard Input/Output (stdio)](https://substackcdn.com/image/fetch/f_auto,q_auto\:good,fl_progressive\:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff3ac325c-f9f8-4e74-bf39-262178a3f96d_935x340.gif)
+
+However, our goal is to connect to the MCP server **from a React app using HTTP**, so we began evaluating **Server-Sent Events (SSE)** as an alternative transport method.
+
+> SSE works well when the server and client are on different machines or communicating across a network:
+>
+> * client → server: HTTP POST
+> * server → client: SSE stream
+
+![SSE](https://substackcdn.com/image/fetch/f_auto,q_auto\:good,fl_progressive\:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fba8c4ae3-d5cd-43db-9950-bca6d744a8bb_816x442.gif)
+
+We also explored the OpenAI documentation—specifically the section on [Extend the model with tools](https://platform.openai.com/docs/quickstart#extend-the-model-with-tools) /Using tools/[Available tools](https://platform.openai.com/docs/guides/tools#available-tools)/ [Remote MCP](https://platform.openai.com/docs/guides/tools-remote-mcp) to understand how to declare a remote MCP server. There we found an example using `curl` that pointed to a remote `server_url`, which gave us a clearer picture of what we might configure:
+
+```bash
+curl https://api.openai.com/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d '{
+  "model": "gpt-4.1",
+  "tools": [
+    {
+      "type": "mcp",
+      "server_label": "deepwiki",
+      "server_url": "https://mcp.deepwiki.com/mcp",
+      "require_approval": "never"
+    }
+  ],
+  "input": "What transport protocols does the 2025-03-26 version of the MCP spec (modelcontextprotocol/modelcontextprotocol) support?"
+}'
+```
+
+This confirmed that our frontend could, in theory, communicate with an MCP server hosted via HTTP/SSE.
+
+### 🔧 We're currently exploring two directions:
+
+1. **Find and configure a public and ready basic MCP server**
+
+   This would let us test end-to-end how our existing app and LLM client can consume an external MCP fast.
+
+2. **Evaluate existing projects with SSE support to use with our app**
+
+   We're considering [`express-mcp-sse-server`](https://github.com/yunusemredilber/express-mcp-sse-server) as a potential foundation to build our own remote GitHubMCP integration with SSE transport. It looks promising, so the idea is to explore this one on our next session
+
+### Useful references:
+
+* [How to host your MCP Server](https://www.devshorts.in/p/how-to-host-your-mcp-server)
+* [MCP Server and Client with SSE & The New Streamable HTTP!](https://levelup.gitconnected.com/mcp-server-and-client-with-sse-the-new-streamable-http-d860850d9d9d)
+* [Example MCP SSE Server](https://github.com/yunusemredilber/express-mcp-sse-server)
+
+So, from this point forward, we’ve decided to move forward with the **SSE-based transport** approach.
+
+---
+
+Let me know if you'd like me to generate a downloadable `.md` file or integrate this into an existing changelog or PR summary.
+
 
 ## May 14, 2025
 **Goal for the day:** Get the `github-mcp-server` running in a Docker container and perform some basic interaction tests.
