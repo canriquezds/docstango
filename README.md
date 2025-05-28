@@ -5,8 +5,12 @@
 
 
 ## May 28, 2025
-This week, we fired up our "example sse mcp server" and learned that the /sse endpoint makes and holds a connection. We were able to "list" resources to see the "getting-started" doc defined within the example mcp server source code. 
+This week, we fired up our "example sse mcp server" and learned that the /sse endpoint makes and holds a connection. We were able to "list" resources to see the "getting-started" doc defined within the example mcp server source code. Below is the image showing the connection via the MCP Inspector included in the sse mcp server.
 ![alt text](/public/assets/image.png)
+
+We were also able to connect using a postman application.
+
+![alt text](/public/assets/image2.png)
 
 For next week, we want to try to introduce our sse based mcp server to the OpenAI client (via it's "tools" attribute). 
 We're unsure whether running the server on localhost might cause problems for the LLM, so we are prepared to run the server on an internet accessible service (like Netlify). Once we get the LLM and MCP server connected, we'll turn our attention to exposing some useful data through our mcp server.
