@@ -4,6 +4,21 @@
 **Project:** Docstango
 
 
+## May 28, 2025
+This week, we fired up our "example sse mcp server" and learned that the /sse endpoint makes and holds a connection. We were able to "list" resources to see the "getting-started" doc defined within the example mcp server source code. 
+![alt text](/public/assets/image.png)
+
+For next week, we want to try to introduce our sse based mcp server to the OpenAI client (via it's "tools" attribute). 
+We're unsure whether running the server on localhost might cause problems for the LLM, so we are prepared to run the server on an internet accessible service (like Netlify). Once we get the LLM and MCP server connected, we'll turn our attention to exposing some useful data through our mcp server.
+
+### Concepts, more concepts.
+
+This is [great article](https://levelup.gitconnected.com/get-start-with-model-context-protocol-671ebf3fe62d) to refresh a bit what we are trying to achive with this project. In the following picture we can see the main elements. So far as we understand it, the `Host with MCP clients` (similar to Cursor, Claude destop, etc) box is our react application. The `example sse mcp server` we spin up today (similar to `GitHubMCPServer`), is one of the boxes in the middle, let's say `MCP Server 2`. `example sse mcp server` will then connect to the "AI/Data source" entity where we can do stuff using our LLM to execute that stuff for us.
+
+![alt text](/public/assets/image1.png)
+
+
+
 ## May 21, 2025
 Today we discovered that the `GitHubMCPServer` communicates using a `stdio` transport. This was confirmed after reading the post [How to host your MCP Server](https://www.devshorts.in/p/how-to-host-your-mcp-server), which helped clarify the server's expected setup.
 
